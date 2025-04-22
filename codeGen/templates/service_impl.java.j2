@@ -1,0 +1,64 @@
+package {{ package_name }};
+
+import {{ base_package }}.exception.ItemNotFoundException;
+import {{ base_package }}.mapper.{{ model_name }}Mapper;
+import {{ base_package }}.model.{{ model_name }}DomainModel;
+import {{ base_package }}.model.dto.request.{{ paging_request }};
+import {{ base_package }}.model.dto.request.{{ model_name }}Request;
+import {{ base_package }}.model.dto.response.{{ model_name }}Response;
+import {{ base_package }}.model.entity.{{ model_name }};
+import {{ base_package }}.repository.{{ repository_name }};
+import {{ base_package }}.service.{{ service_interface }};
+import com.micro.core.model.CustomPage;
+import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class {{ model_name }}ServiceImpl implements {{ service_interface }} {
+    private final {{ model_name | camel_case }} {{ model_name | camel_case }}Mapper = Mappers.getMapper({{ mapper_name }}.class);
+    private final {{ repository_name }} {{ model_name | camel_case }}Repository;
+
+    public {{ model_name }}ServiceImpl({{ repository_name }} {{ model_name | camel_case }}Repository) {
+        this.{{ model_name | camel_case }}Repository = {{ model_name | camel_case }}Repository;
+    }
+
+    @Override
+    public {{ model_name }}Response update{{ model_name }}({{ model_name }}Request request) {
+        return null;
+    }
+
+    @Override
+    public CustomPage<{{ model_name }}DomainModel> get{{ model_name }}s(final {{ paging_request }} pagingRequest) {
+        final Page<{{ model_name }}> page = {{ model_name | camel_case }}Repository.findAll(pagingRequest.toPageable());
+        final List<{{ model_name }}DomainModel> list = {{ model_name | camel_case }}Mapper.entitiesToDomainModels(page.getContent());
+        return CustomPage.of(list, page);
+    }
+
+    @Override
+    public {{ model_name }}DomainModel create{{ model_name }}({{ model_name }}Request request) {
+        final {{ model_name }} entity = {{ model_name | camel_case }}Mapper.requestToEntity(request);
+        {{ model_name }} saved = {{ model_name | camel_case }}Repository.save(entity);
+        return {{ model_name | camel_case }}Mapper.entityToDomainModel(saved);
+    }
+
+    @Override
+    public {{ model_name }}Response updateById(Long id, {{ model_name }}Request request) {
+        final {{ model_name }} entity = {{ model_name | camel_case }}Repository
+                .findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("With given id = " + id));
+        {{ model_name | camel_case }}Mapper.updateEntityFromRequest(request, entity);
+        {{ model_name }} updated = {{ model_name | camel_case }}Repository.save(entity);
+        return {{ model_name | camel_case }}Mapper.entityToResponse(updated);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        final {{ model_name }} entity = {{ model_name | camel_case }}Repository
+                .findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("With given id = " + id));
+        {{ model_name | camel_case }}Repository.delete(entity);
+    }
+}

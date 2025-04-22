@@ -1,0 +1,64 @@
+package {{ package_name }};
+
+import com.micro.core.model.CustomPage;
+import com.micro.core.model.dto.response.CustomPagingResponse;
+import com.micro.core.model.dto.response.CustomResponse;
+import {{ base_package }}.mapper.{{model_name}}CustomPageToCustomPagingResponseMapper;
+import {{ base_package }}.model.{{ model_name }}DomainModel;
+import {{ base_package }}.model.dto.request.{{ model_name }}PagingRequest;
+import {{ base_package }}.model.dto.request.{{ model_name }}Request;
+import {{ base_package }}.model.dto.response.{{ model_name }}Response;
+import {{ base_package }}.service.{{ model_name }}Service;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/{{ model_name | camel_case }}s")
+@RequiredArgsConstructor
+public class {{ model_name }}Controller {
+    private final {{ model_name }}Service {{ model_name | camel_case }}Service;
+    private final {{model_name}}CustomPageToCustomPagingResponseMapper customPageToCustomPagingResponseMapper =
+            Mappers.getMapper({{model_name}}CustomPageToCustomPagingResponseMapper.class);
+
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('ANY:view','DM0401:view','DM0402:view','DM0403:view','DM0404:view')")
+    public CustomResponse<CustomPagingResponse<{{ model_name }}Response>> get{{ model_name }}s(
+            @RequestBody @Valid final {{ model_name }}PagingRequest request) {
+
+        final CustomPage<{{ model_name }}DomainModel> customPage =
+                {{ model_name | camel_case }}Service.get{{ model_name }}s(request);
+
+        final CustomPagingResponse<{{ model_name }}Response> pagingResponse =
+                customPageToCustomPagingResponseMapper.toPagingResponse(customPage);
+
+        return CustomResponse.successOf(pagingResponse);
+    }
+
+    @PostMapping
+    public CustomResponse<Long> create{{ model_name }}(@RequestBody @Valid final {{ model_name }}Request request) {
+        final {{ model_name | camel_case }}DomainModel created =
+                {{ model_name | camel_case }}Service.create{{ model_name }}(request);
+
+        return CustomResponse.successOf(created.getId());
+    }
+
+    @PutMapping("/{id}")
+    public CustomResponse<{{ model_name }}Response> update{{ model_name }}(
+            @RequestBody @Valid final {{ model_name }}Request request,
+            @PathVariable final Long id) {
+
+        final {{ model_name | camel_case }}Response updated =
+                {{ model_name | camel_case }}Service.updateById(id, request);
+
+        return CustomResponse.successOf(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public CustomResponse<Void> delete{{ model_name }}(@PathVariable final Long id) {
+        {{ model_name | camel_case }}Service.deleteById(id);
+        return CustomResponse.SUCCESS;
+    }
+}

@@ -1,0 +1,20 @@
+package {{ package_name }};
+
+import com.micro.core.model.CustomPage;
+import {{ base_package }}.model.{{ model_name }}DomainModel;
+import {{ base_package }}.model.dto.request.{{ model_name }}PagingRequest;
+import {{ base_package }}.model.dto.request.{{ model_name }}Request;
+import {{ base_package }}.model.dto.response.{{ model_name }}Response;
+import jakarta.validation.Valid;
+
+public interface {{ model_name }}Service {
+    {{ model_name }}Response update{{ model_name }}({{ model_name }}Request {{ model_name | camel_case }}Request);
+
+    CustomPage<{{ model_name }}DomainModel> get{{ model_name }}s(final {{ model_name }}PagingRequest {{ model_name | camel_case }}PagingRequest);
+
+    {{ model_name }}DomainModel create{{ model_name }}(final {{ model_name }}Request {{ model_name | camel_case }}Request);
+
+    {{ model_name }}Response updateById(Long {{ model_name | camel_case }}Id, {{ model_name }}Request {{ model_name | camel_case }}Request);
+
+    void deleteById(Long {{ model_name | camel_case }}Id);
+}

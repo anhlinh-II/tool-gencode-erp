@@ -1,0 +1,38 @@
+package {{ package_name }};
+
+import com.micro.core.model.CustomPage;
+import com.micro.core.model.dto.response.CustomPagingResponse;
+import {{ base_package }}.model.{{ model_name }}DomainModel;
+import {{ base_package }}.model.dto.response.{{ model_name }}Response;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+import java.util.List;
+
+@Mapper
+public interface {{ model_name }}CustomPageToCustomPagingResponseMapper {
+
+    {{ model_name }}Mapper {{ entity_var }}Mapper = Mappers.getMapper({{ model_name }}Mapper.class);
+
+    default CustomPagingResponse<{{ model_name }}Response> toPagingResponse(CustomPage<{{ model_name }}DomainModel> page) {
+
+        if (page == null) {
+            return null;
+        }
+
+        return CustomPagingResponse.<{{ model_name }}Response>builder()
+                .content(toResponseList(page.getContent()))
+                .totalElementCount(page.getTotalElementCount())
+                .totalPageCount(page.getTotalPageCount())
+                .pageNumber(page.getPageNumber())
+                .pageSize(page.getPageSize())
+                .build();
+    }
+
+    default List<{{ model_name }}Response> toResponseList(List<{{ model_name }}DomainModel> domainModels) {
+        if (domainModels == null) {
+            return null;
+        }
+        return {{ entity_var }}Mapper.domainModelsToResponses(domainModels);
+    }
+}

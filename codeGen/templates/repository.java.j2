@@ -1,0 +1,7 @@
+package {{ package_name }};
+
+import {{ base_package }}.model.entity.{{ model_name }};
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface {{ model_name }}Repository extends JpaRepository<{{ model_name }}, Long> {
+}

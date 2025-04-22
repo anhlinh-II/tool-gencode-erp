@@ -1,0 +1,15 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "{{ table_name }}")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class {{ class_name }} {
+    {% for col in columns %}
+    private {{ col.java_type }} {{ col.name }};
+    {% endfor %}
+}

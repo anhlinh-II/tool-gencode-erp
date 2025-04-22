@@ -1,0 +1,15 @@
+package {{ package_name }};
+
+import {{ base_package }}.model.{{ model_name }}DomainModel;
+import {{ base_package }}.model.dto.request.{{ model_name }}Request;
+import {{ base_package }}.model.dto.response.{{ model_name }}Response;
+import {{ base_package }}.model.entity.{{ model_name }};
+import com.micro.core.mapper.BaseMapstruct;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+
+@Mapper
+public interface {{ model_name }}Mapper extends BaseMapstruct<{{ model_name }}DomainModel, {{ model_name }}, {{ model_name }}Request, {{ model_name }}Response> {
+
+    void updateEntityFromRequest({{ model_name }}Request {{ model_name | camel_case }}Request, @MappingTarget {{ model_name }} {{ model_name | camel_case }});
+}
