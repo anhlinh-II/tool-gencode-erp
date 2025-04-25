@@ -16,16 +16,23 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/{{ model_name | camel_case }}s")
+@RequestMapping("/stock/{{ model_name | camel_case }}s")
 @RequiredArgsConstructor
 public class {{ model_name }}Controller {
     private final {{ model_name }}Service {{ model_name | camel_case }}Service;
     private final {{model_name}}CustomPageToCustomPagingResponseMapper customPageToCustomPagingResponseMapper =
             Mappers.getMapper({{model_name}}CustomPageToCustomPagingResponseMapper.class);
 
-    @GetMapping
-    @PreAuthorize("hasAnyAuthority('ANY:view','DM0401:view','DM0402:view','DM0403:view','DM0404:view')")
-    public CustomResponse<CustomPagingResponse<{{ model_name }}Response>> get{{ model_name }}s(
+    @PostMapping("/item/{id}")
+    public CustomResponse<{{model_name}}Response> get{{model_name}}ById(@PathVariable final Long id) {
+        {{model_name}}Response response = this.{{model_name | camel_case}}Service.getById(id);
+
+        return CustomResponse.successOf(response);
+    }
+
+    @PostMapping("/paging")
+    // @PreAuthorize("hasAnyAuthority('ANY:view','DM0401:view','DM0402:view','DM0403:view','DM0404:view')")
+    public CustomResponse<CustomPagingResponse<{{ model_name }}Response>> get{{ model_name }}Paging(
             @RequestBody @Valid final {{ model_name }}PagingRequest request) {
 
         final CustomPage<{{ model_name }}DomainModel> customPage =
@@ -37,20 +44,20 @@ public class {{ model_name }}Controller {
         return CustomResponse.successOf(pagingResponse);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public CustomResponse<Long> create{{ model_name }}(@RequestBody @Valid final {{ model_name }}Request request) {
-        final {{ model_name | camel_case }}DomainModel created =
+        final {{ model_name }}DomainModel created =
                 {{ model_name | camel_case }}Service.create{{ model_name }}(request);
 
         return CustomResponse.successOf(created.getId());
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/update/{id}")
     public CustomResponse<{{ model_name }}Response> update{{ model_name }}(
             @RequestBody @Valid final {{ model_name }}Request request,
             @PathVariable final Long id) {
 
-        final {{ model_name | camel_case }}Response updated =
+        final {{ model_name }}Response updated =
                 {{ model_name | camel_case }}Service.updateById(id, request);
 
         return CustomResponse.successOf(updated);

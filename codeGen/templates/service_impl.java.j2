@@ -3,7 +3,7 @@ package {{ package_name }};
 import {{ base_package }}.exception.ItemNotFoundException;
 import {{ base_package }}.mapper.{{ model_name }}Mapper;
 import {{ base_package }}.model.{{ model_name }}DomainModel;
-import {{ base_package }}.model.dto.request.{{ paging_request }};
+import {{ base_package }}.model.dto.request.{{ model_name }}PagingRequest;
 import {{ base_package }}.model.dto.request.{{ model_name }}Request;
 import {{ base_package }}.model.dto.response.{{ model_name }}Response;
 import {{ base_package }}.model.entity.{{ model_name }};
@@ -18,8 +18,16 @@ import java.util.List;
 
 @Service
 public class {{ model_name }}ServiceImpl implements {{ service_interface }} {
-    private final {{ model_name | camel_case }} {{ model_name | camel_case }}Mapper = Mappers.getMapper({{ mapper_name }}.class);
+    private final {{ model_name }}Mapper {{ model_name | camel_case }}Mapper = Mappers.getMapper({{ model_name }}Mapper.class);
     private final {{ repository_name }} {{ model_name | camel_case }}Repository;
+
+    @Override
+    public {{model_name}}Response getById(Long id) {
+        final {{model_name}} entity = {{model_name | camel_case}}Repository
+                .findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("With given id = " + id));
+        return {{model_name | camel_case}}Mapper.entityToResponse(entity);
+    }
 
     public {{ model_name }}ServiceImpl({{ repository_name }} {{ model_name | camel_case }}Repository) {
         this.{{ model_name | camel_case }}Repository = {{ model_name | camel_case }}Repository;
@@ -31,7 +39,7 @@ public class {{ model_name }}ServiceImpl implements {{ service_interface }} {
     }
 
     @Override
-    public CustomPage<{{ model_name }}DomainModel> get{{ model_name }}s(final {{ paging_request }} pagingRequest) {
+    public CustomPage<{{ model_name }}DomainModel> get{{ model_name }}s(final {{ model_name }}PagingRequest pagingRequest) {
         final Page<{{ model_name }}> page = {{ model_name | camel_case }}Repository.findAll(pagingRequest.toPageable());
         final List<{{ model_name }}DomainModel> list = {{ model_name | camel_case }}Mapper.entitiesToDomainModels(page.getContent());
         return CustomPage.of(list, page);
