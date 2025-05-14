@@ -39,7 +39,7 @@ public class {{ model_name }}ServiceImpl implements {{ service_interface }} {
     }
 
     @Override
-    public CustomPage<{{ model_name }}DomainModel> get{{ model_name }}s(final {{ model_name }}PagingRequest pagingRequest) {
+    public CustomPage<List<{{ model_name }}DomainModel>> get{{ model_name }}Paging(final {{ model_name }}PagingRequest pagingRequest) {
         final Page<{{ model_name }}> page = {{ model_name | camel_case }}Repository.findAll(pagingRequest.toPageable());
         final List<{{ model_name }}DomainModel> list = {{ model_name | camel_case }}Mapper.entitiesToDomainModels(page.getContent());
         return CustomPage.of(list, page);

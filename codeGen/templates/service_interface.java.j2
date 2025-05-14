@@ -12,7 +12,7 @@ public interface {{ model_name }}Service {
 
     {{ model_name }}Response update{{ model_name }}({{ model_name }}Request {{ model_name | camel_case }}Request);
 
-    CustomPage<{{ model_name }}DomainModel> get{{ model_name }}s(final {{ model_name }}PagingRequest {{ model_name | camel_case }}PagingRequest);
+    CustomPage<List<{{ model_name }}DomainModel>> get{{ model_name }}Paging(final {{ model_name }}PagingRequest {{ model_name | camel_case }}PagingRequest);
 
     {{ model_name }}DomainModel create{{ model_name }}(final {{ model_name }}Request {{ model_name | camel_case }}Request);
 

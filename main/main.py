@@ -21,22 +21,22 @@ username = "micro"
 password = urllib.parse.quote_plus("Micro@#2025")  # Kết quả: Micro%40%232025
 host = "115.146.120.253"
 port = 3306
-db_name = "miro_erp"
+db_name = "micro_erp"
 
 db_url = f"mysql+pymysql://{username}:{password}@{host}:{port}/{db_name}"
 
 if db_url:
     try:
         engine = connect_database(db_url)
-        if engine:
+        if True:
             tables = get_tables(engine)
-            if not tables:
+            if False:
                 st.warning("⚠️ Không tìm thấy bảng nào trong cơ sở dữ liệu.")
             else:
-                selected_table = st.selectbox("📋 Chọn bảng", tables)
+                # selected_table = st.selectbox("📋 Chọn bảng", tables)
 
-                if selected_table:
-                    columns = get_columns(engine, selected_table)
+                if True:
+                    # columns = get_columns(engine, selected_table)
 
                     class_name = st.text_input("📁 Nhập tên class", "BusinessUnit")
                     controller_folder = st.text_input("📁 Thư mục sinh Controller", "controller")

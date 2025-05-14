@@ -32,13 +32,13 @@ public class {{ model_name }}Controller {
 
     @PostMapping("/paging")
     // @PreAuthorize("hasAnyAuthority('ANY:view','DM0401:view','DM0402:view','DM0403:view','DM0404:view')")
-    public CustomResponse<CustomPagingResponse<{{ model_name }}Response>> get{{ model_name }}Paging(
+    public CustomResponse<List<{{ model_name }}Response>> get{{ model_name }}Paging(
             @RequestBody @Valid final {{ model_name }}PagingRequest request) {
 
-        final CustomPage<{{ model_name }}DomainModel> customPage =
+        final CustomPage<List<{{ model_name }}DomainModel>> customPage =
                 {{ model_name | camel_case }}Service.get{{ model_name }}s(request);
 
-        final CustomPagingResponse<{{ model_name }}Response> pagingResponse =
+        final CustomPagingResponse<List<{{ model_name }}Response>> pagingResponse =
                 customPageToCustomPagingResponseMapper.toPagingResponse(customPage);
 
         return CustomResponse.successOf(pagingResponse);

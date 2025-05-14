@@ -14,13 +14,13 @@ public interface {{ model_name }}CustomPageToCustomPagingResponseMapper {
 
     {{ model_name }}Mapper {{ entity_var }}Mapper = Mappers.getMapper({{ model_name }}Mapper.class);
 
-    default CustomPagingResponse<{{ model_name }}Response> toPagingResponse(CustomPage<{{ model_name }}DomainModel> page) {
+    default CustomPagingResponse<List<{{ model_name }}Response>> toPagingResponse(CustomPage<List<{{ model_name }}DomainModel>> page) {
 
         if (page == null) {
             return null;
         }
 
-        return CustomPagingResponse.<{{ model_name }}Response>builder()
+        return CustomPagingResponse.<List<{{ model_name }}Response>>builder()
                 .content(toResponseList(page.getContent()))
                 .totalElementCount(page.getTotalElementCount())
                 .totalPageCount(page.getTotalPageCount())
